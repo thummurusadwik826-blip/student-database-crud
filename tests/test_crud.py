@@ -152,12 +152,22 @@ def create(client, data: dict):
 
 class TestHealthCheck:
 
-    def test_root_returns_200(self, client):
-        """The root endpoint confirms the API is running."""
+    def test_dashboard_returns_200(self, client):
+        """The dashboard route at / returns 200 with HTML content."""
         response = client.get("/")
 
         assert response.status_code == 200
-        assert "running" in response.json()["message"].lower()
+        # The root now serves the HTML dashboard, not JSON
+        assert "text/html" in response.headers.get("content-type", "")
+
+    def test_health_endpoint_returns_200(self, client):
+        """The /health endpoint returns 200 with a JSON status message."""
+        response = client.get("/health")
+
+        assert response.status_code == 200
+        body = response.json()
+        assert body["status"] == "ok"
+        assert "running" in body["message"].lower()
 
 
 # ===========================================================================
@@ -650,3 +660,56 @@ class TestDeleteStudent:
         assert "STU001" in remaining_ids   # Alice still here
         assert "STU002" not in remaining_ids  # Bob is gone
         assert "STU003" in remaining_ids   # Carol still here
+
+
+# ===========================================================================
+# Frontend routes — dashboard HTML and static assets
+# ===========================================================================
+
+class TestFrontendRoutes:
+    """
+    Verifies that the HTML dashboard and static files are served correctly.
+    These tests do not interact with the database.
+    """
+
+    def test_dashboard_html_served(self, client):
+        """GET / returns 200 with HTML content."""
+        response = client.get("/")
+        assert response.status_code == 200
+        assert "text/html" in response.headers.get("content-type", "")
+
+    def test_dashboard_contains_student_table(self, client):
+        """The dashboard HTML includes the student table element."""
+        response = client.get("/")
+        assert b"student-tbody" in response.content
+
+    def test_dashboard_links_to_api_docs(self, client):
+        """The dashboard HTML includes a link to /docs."""
+        response = client.get("/")
+        assert b"/docs" in response.content
+
+    def test_css_asset_served(self, client):
+        """The CSS file is served at /static/css/dashboard.css."""
+        response = client.get("/static/css/dashboard.css")
+        assert response.status_code == 200
+        assert "text/css" in response.headers.get("content-type", "")
+
+    def test_js_asset_served(self, client):
+        """The JS file is served at /static/js/dashboard.js."""
+        response = client.get("/static/js/dashboard.js")
+        assert response.status_code == 200
+        # content-type may be application/javascript or text/javascript
+        ct = response.headers.get("content-type", "")
+        assert "javascript" in ct
+
+    def test_health_endpoint_returns_json(self, client):
+        """GET /health returns 200 with a JSON status field."""
+        response = client.get("/health")
+        assert response.status_code == 200
+        assert response.json()["status"] == "ok"
+
+    def test_api_docs_page_served(self, client):
+        """FastAPI's /docs page is accessible."""
+        response = client.get("/docs")
+        assert response.status_code == 200
+        assert "text/html" in response.headers.get("content-type", "")

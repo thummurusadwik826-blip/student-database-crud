@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Database — EWB Edu Tech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/dashboard.css" />
+</head>
+<body>
+
+<!-- Mobile sidebar overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+
+<div class="layout">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+    <a class="sidebar-brand" href="/" aria-label="Student Database home">
+      <div class="sidebar-brand-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+      </div>
+      <div>
+        <div class="sidebar-brand-text">StudentDB</div>
+        <div class="sidebar-brand-sub">EWB Edu Tech</div>
+      </div>
+    </a>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Management</div>
+      <a class="nav-link active" href="/" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        Students
+      </a>
+
+      <div class="nav-section-label" style="margin-top:16px">Developer</div>
+      <a class="nav-link" href="/docs" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+        </svg>
+        API Docs
+      </a>
+      <a class="nav-link" href="/redoc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        ReDoc
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      Python · FastAPI · SQLite
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="main">
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <button class="topbar-menu-btn" id="sidebar-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+      <span class="topbar-title">Student Management</span>
+      <a class="topbar-api-link" href="/docs" target="_blank" rel="noopener" aria-label="Open API documentation">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
+            clip-rule="evenodd"/>
+        </svg>
+        API Docs
+      </a>
+    </header>
+
+    <!-- Page content -->
+    <main class="page-content" id="main-content">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1>Students</h1>
+          <p>Manage and search all student records</p>
+        </div>
+        <button class="btn btn-primary" id="btn-add">
+          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"/>
+          </svg>
+          Add Student
+        </button>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid" aria-label="Summary statistics">
+        <div class="stat-card">
+          <div class="stat-icon blue" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="stat-label">Total Students</div>
+            <div class="stat-value" id="stat-total">—</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon green" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="stat-label">With Email</div>
+            <div class="stat-value" id="stat-email">—</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon purple" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="stat-label">With Phone</div>
+            <div class="stat-value" id="stat-phone">—</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon amber" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="stat-label">Both Contacts</div>
+            <div class="stat-value" id="stat-both">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Students table card -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">All Students</span>
+          <div class="toolbar">
+            <div class="search-wrap">
+              <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd"
+                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                  clip-rule="evenodd"/>
+              </svg>
+              <input
+                class="search-input"
+                id="search-input"
+                type="search"
+                placeholder="Search by ID, name, email, phone…"
+                aria-label="Search students"
+                autocomplete="off"
+              />
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-refresh" title="Refresh student list" aria-label="Refresh">
+              <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd"
+                  d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                  clip-rule="evenodd"/>
+              </svg>
+              Refresh
+            </button>
+          </div>
+          <span id="result-count" style="font-size:.78rem;color:var(--gray-400);white-space:nowrap;"></span>
+        </div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table aria-label="Student records">
+              <thead>
+                <tr>
+                  <th data-col="student_id" scope="col">
+                    Student ID <span class="sort-icon" aria-hidden="true">↕</span>
+                  </th>
+                  <th data-col="name" scope="col">
+                    Name <span class="sort-icon" aria-hidden="true">↕</span>
+                  </th>
+                  <th data-col="date_of_birth" scope="col">
+                    Date of Birth <span class="sort-icon" aria-hidden="true">↕</span>
+                  </th>
+                  <th data-col="email" scope="col">
+                    Contact <span class="sort-icon" aria-hidden="true">↕</span>
+                  </th>
+                  <th scope="col" style="text-align:right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="student-tbody">
+                <!-- Populated by dashboard.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main><!-- /page-content -->
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- ===================== TOAST CONTAINER ===================== -->
+<div id="toast-container" aria-live="polite" aria-label="Notifications"></div>
+
+<!-- ===================== ADD STUDENT MODAL ===================== -->
+<div class="modal-backdrop" id="modal-add" role="dialog" aria-modal="true" aria-labelledby="modal-add-title">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-add-title">Add Student</h2>
+      <button class="modal-close" data-close-modal="modal-add" aria-label="Close">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"/>
+        </svg>
+      </button>
+    </div>
+    <form id="form-add" novalidate>
+      <div class="modal-body">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="add-student-id">
+              Student ID <span class="required" aria-label="required">*</span>
+            </label>
+            <input
+              class="form-control" id="add-student-id"
+              name="student_id" type="text"
+              placeholder="e.g. STU001"
+              autocomplete="off" required
+            />
+            <div class="form-error" data-error="student_id" role="alert"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="add-dob">
+              Date of Birth <span class="required" aria-label="required">*</span>
+            </label>
+            <input
+              class="form-control" id="add-dob"
+              name="date_of_birth" type="date"
+              required
+            />
+            <div class="form-error" data-error="date_of_birth" role="alert"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="add-name">
+            Full Name <span class="required" aria-label="required">*</span>
+          </label>
+          <input
+            class="form-control" id="add-name"
+            name="name" type="text"
+            placeholder="e.g. Alice Johnson"
+            autocomplete="off" required
+          />
+          <div class="form-error" data-error="name" role="alert"></div>
+        </div>
+
+        <div class="form-section-title">Contact Information</div>
+        <p class="contact-note">At least one of email or phone is required.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="add-email">
+              Email <span class="optional">(optional)</span>
+            </label>
+            <input
+              class="form-control" id="add-email"
+              name="email" type="email"
+              placeholder="alice@example.com"
+              autocomplete="email"
+            />
+            <div class="form-error" data-error="email" role="alert"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="add-phone">
+              Phone <span class="optional">(optional)</span>
+            </label>
+            <input
+              class="form-control" id="add-phone"
+              name="phone" type="tel"
+              placeholder="e.g. 9876543210"
+              autocomplete="tel"
+            />
+            <div class="form-error" data-error="phone" role="alert"></div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-add">Cancel</button>
+        <button type="submit" class="btn btn-primary">Add Student</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===================== EDIT STUDENT MODAL ===================== -->
+<div class="modal-backdrop" id="modal-edit" role="dialog" aria-modal="true" aria-labelledby="modal-edit-title">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-edit-title">Edit Student</h2>
+      <button class="modal-close" data-close-modal="modal-edit" aria-label="Close">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"/>
+        </svg>
+      </button>
+    </div>
+    <form id="form-edit" novalidate>
+      <div class="modal-body">
+        <p class="contact-note" style="margin-bottom:16px">
+          Only fields you change will be updated. Leave a field blank to clear it
+          (subject to the contact method rule).
+        </p>
+
+        <div class="form-group">
+          <label class="form-label" for="edit-name">Full Name</label>
+          <input
+            class="form-control" id="edit-name"
+            name="name" type="text"
+            placeholder="Full name"
+            autocomplete="off"
+          />
+          <div class="form-error" data-error="name" role="alert"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="edit-dob">Date of Birth</label>
+          <input
+            class="form-control" id="edit-dob"
+            name="date_of_birth" type="date"
+          />
+          <div class="form-error" data-error="date_of_birth" role="alert"></div>
+        </div>
+
+        <div class="form-section-title">Contact Information</div>
+        <p class="contact-note">At least one contact method must remain after saving.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="edit-email">Email</label>
+            <input
+              class="form-control" id="edit-email"
+              name="email" type="email"
+              placeholder="Email address"
+              autocomplete="email"
+            />
+            <div class="form-error" data-error="email" role="alert"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="edit-phone">Phone</label>
+            <input
+              class="form-control" id="edit-phone"
+              name="phone" type="tel"
+              placeholder="Phone number"
+              autocomplete="tel"
+            />
+            <div class="form-error" data-error="phone" role="alert"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-edit">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===================== DETAIL MODAL ===================== -->
+<div class="modal-backdrop" id="modal-detail" role="dialog" aria-modal="true" aria-labelledby="modal-detail-title">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-detail-title">Student Details</h2>
+      <button class="modal-close" data-close-modal="modal-detail" aria-label="Close">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"/>
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-grid">
+        <div class="detail-field">
+          <div class="detail-label">Student ID</div>
+          <div class="detail-value mono" data-field="student_id">—</div>
+        </div>
+        <div class="detail-field">
+          <div class="detail-label">Date of Birth</div>
+          <div class="detail-value" data-field="date_of_birth">—</div>
+        </div>
+        <div class="detail-field" style="grid-column:1/-1">
+          <div class="detail-label">Full Name</div>
+          <div class="detail-value" data-field="name">—</div>
+        </div>
+        <div class="detail-field">
+          <div class="detail-label">Email</div>
+          <div class="detail-value" data-field="email">—</div>
+        </div>
+        <div class="detail-field">
+          <div class="detail-label">Phone</div>
+          <div class="detail-value" data-field="phone">—</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-close-modal="modal-detail">Close</button>
+      <button type="button" class="btn btn-primary" id="detail-edit-btn">Edit Student</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== DELETE CONFIRM MODAL ===================== -->
+<div class="modal-backdrop confirm-modal" id="modal-delete" role="dialog" aria-modal="true" aria-labelledby="modal-delete-title">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-delete-title">Confirm Deletion</h2>
+      <button class="modal-close" data-close-modal="modal-delete" aria-label="Close">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"/>
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="confirm-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+      </div>
+      <div class="confirm-text">
+        <h3>Delete this student?</h3>
+        <p>
+          You are about to permanently delete
+          <span class="confirm-name">this student</span>
+          (<span class="confirm-student-id" style="font-family:monospace;font-size:.85em"></span>).
+          This action cannot be undone.
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-close-modal="modal-delete">Cancel</button>
+      <button type="button" class="btn btn-danger" id="btn-confirm-delete">Delete Student</button>
+    </div>
+  </div>
+</div>
+
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>
