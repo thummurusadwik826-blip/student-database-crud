@@ -1,0 +1,22 @@
+# Python bytecode — compiled files generated automatically, never commit these
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment — contains all installed packages, recreated from requirements.txt
+.venv/
+venv/
+env/
+
+# SQLite database — contains real student data, must not be committed
+students.db
+
+# pytest cache — generated during test runs
+.pytest_cache/
+
+# macOS metadata files
+.DS_Store
+
+# Editor and IDE folders
+.vscode/
+.idea/
